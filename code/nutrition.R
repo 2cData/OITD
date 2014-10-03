@@ -37,15 +37,8 @@ library(assertthat) # correctedness checks
 
 setwd("/home/dave/workspace/OITD")
 
-foodDesciption <- fread("data/FOOD_DES.txt", sep="^", stringsAsFactors = FALSE)
-
-
-foodDesciption <- read.table('./data/FOOD_DES.txt', stringsAsFactors = FALSE)
-
-colClasses <- c(col)
-colnames <- c('NDB_No', 'FdGrp_Cd', 'Long_Desc', 'Shrt_Desc', 'ComName', 'ManufacName', 'Survey', 'Ref_desc', 'Refuse', 'SciName', 'N_Factor', 'Pro_Factor', 'Fat_Factor', 'CHO_Factor')   
-
-foodDescription <- read.table('data/FOOD_DES.txt', 
+# Food Description  FOOD_DES        8,618
+food.description <- read.table('data/FOOD_DES.txt', 
            header = FALSE, 
            sep = "^", 
            quote = "~",
@@ -54,13 +47,30 @@ foodDescription <- read.table('data/FOOD_DES.txt',
            nrows = 8618,
            stringsAsFactors = FALSE
         )
-
-
-assert_that(nrow(foodDescription) == 8618)
-# Food Description  FOOD_DES        8,618
-
+assert_that(nrow(food.description) == 8618)
 
 # Nutrient Data     NUT_DATA        654,572
+nutrient.data <- read.table('data/NUT_DATA.txt', 
+                              header = FALSE, 
+                              sep = "^", 
+                              quote = "~",
+                              col.names  = c("NDB_No",     "FdGrp_Cd", "Long_Desc", "Shrt_Desc", "ComName",  "ManufacName", "Survey",    "Ref_desc",  "Refuse", "SciName",    "N_Factor", "Pro_Factor", "Fat_Factor", "CHO_Factor"), 
+                              colClasses = c("character", "character", "character", "character", "character", "character",  "character", "character", "numeric", "character", "numeric",  "numeric",     "numeric",   "numeric"),                                                                           
+                              nrows = 654572,
+                              stringsAsFactors = FALSE
+)
+assert_that(nrow(nutrient.data) == 654572)
+
+
 # Weight            WEIGHT          15,228
 # Food Group Desc   FD_GROUP        25
-
+food.group <- read.table('data/FD_GROUP.txt', 
+                            header = FALSE, 
+                            sep = "^", 
+                            quote = "~",
+                            col.names  = c("FdGrp_Cd",  "FdGrp_Desc"), 
+                            colClasses = c("character", "character"),                                                                           
+                            nrows = 25,
+                            stringsAsFactors = FALSE
+)
+assert_that(nrow(food.group) == 25)
