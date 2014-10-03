@@ -87,12 +87,21 @@ food.group <- read.table('data/FD_GROUP.txt',
                             stringsAsFactors = FALSE
 )
 assert_that(nrow(food.group) == 25)
-
+assert_that(ncol(food.group) == 2)
 
 # FOOD_DES links to 
 #   FD_GROUP by FdGrp_Cd field
 #   NUT_DATA by NDB_No field
 #   WEIGHT by NDB_No field 
-NEI_SCC <- inner_join(NEI, SCC, by="SCC")
 
-inner_join(food.description, food.group, by="FdGrp_Cd")  
+nutrition.info <- inner_join(food.description, food.group, by="FdGrp_Cd")  
+assert_that(nrow(nutrition.info) == 8618)
+assert_that(ncol(nutrition.info) == 14 + 2 - 1)
+
+nutrition.info <- inner_join(nutrition.info, weight, by="NDB_No")  
+assert_that(nrow(nutrition.info) == 15228)
+assert_that(ncol(nutrition.info) == 15 + 7 - 1)
+
+nutrition.info <- inner_join(nutrition.info, nutrient.data, by="NDB_No")  
+assert_that(nrow(nutrition.info) == 654572) #1234081 TODO
+assert_that(ncol(nutrition.info) == 21 + 18 - 1)
