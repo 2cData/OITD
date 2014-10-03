@@ -48,21 +48,34 @@ food.description <- read.table('data/FOOD_DES.txt',
            stringsAsFactors = FALSE
         )
 assert_that(nrow(food.description) == 8618)
+assert_that(ncol(food.description) == 14)
 
 # Nutrient Data     NUT_DATA        654,572
 nutrient.data <- read.table('data/NUT_DATA.txt', 
                               header = FALSE, 
                               sep = "^", 
                               quote = "~",
-                              col.names  = c("NDB_No",     "FdGrp_Cd", "Long_Desc", "Shrt_Desc", "ComName",  "ManufacName", "Survey",    "Ref_desc",  "Refuse", "SciName",    "N_Factor", "Pro_Factor", "Fat_Factor", "CHO_Factor"), 
-                              colClasses = c("character", "character", "character", "character", "character", "character",  "character", "character", "numeric", "character", "numeric",  "numeric",     "numeric",   "numeric"),                                                                           
+                              col.names  = c("NDB_No",    "Nutr_No",   "Nutr_Val", "Num_Data_Pts", "Std_Error",  "Src_Cd",    "Deriv_Cd",  "Ref_NDB_No",  "Add_Nutr_Mark", "Num_Studies", "Min",    "Max",      "DF",       "Low_EB",  "Up_EB",   "Stat_cmt",  "AddMod_Date", "CC"), 
+                              colClasses = c("character", "character", "numeric",  "numeric",      "numeric",    "character", "character", "character",   "character",     "numeric",     "numeric", "numeric",  "numeric", "numeric", "numeric", "character", "character", "character"),
                               nrows = 654572,
                               stringsAsFactors = FALSE
 )
 assert_that(nrow(nutrient.data) == 654572)
-
+assert_that(ncol(nutrient.data) == 18)
 
 # Weight            WEIGHT          15,228
+weight <- read.table('data/WEIGHT.txt', 
+                         header = FALSE, 
+                         sep = "^", 
+                         quote = "~",
+                         col.names  = c("NDB_No",    "Seq",      "Amount"  , "Msre_Desc", "Gm_Wgt", "Num_Data_Pts", "Std_Dev" ), 
+                         colClasses = c("character", "character", "numeric", "character", "numeric", "numeric"    , "numeric"),                                                                           
+                         nrows = 15228,
+                         stringsAsFactors = FALSE
+)
+assert_that(nrow(weight) == 15228)
+assert_that(ncol(weight) == 7)
+
 # Food Group Desc   FD_GROUP        25
 food.group <- read.table('data/FD_GROUP.txt', 
                             header = FALSE, 
@@ -74,3 +87,12 @@ food.group <- read.table('data/FD_GROUP.txt',
                             stringsAsFactors = FALSE
 )
 assert_that(nrow(food.group) == 25)
+
+
+# FOOD_DES links to 
+#   FD_GROUP by FdGrp_Cd field
+#   NUT_DATA by NDB_No field
+#   WEIGHT by NDB_No field 
+NEI_SCC <- inner_join(NEI, SCC, by="SCC")
+
+inner_join(food.description, food.group, by="FdGrp_Cd")  
