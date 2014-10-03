@@ -63,6 +63,23 @@ nutrient.data <- read.table('data/NUT_DATA.txt',
 assert_that(nrow(nutrient.data) == 654572)
 assert_that(ncol(nutrient.data) == 18)
 
+#link to  NUTR_DEF by Nutr_No
+nutrient.definition <- read.table('data/NUTR_DEF.txt', 
+                            header = FALSE, 
+                            sep = "^", 
+                            quote = "~",
+                            col.names  = c("NDB_No",    "Units",     "Tagname ",   "NutrDesc",  "Num_Dec",   "SR_Order"), 
+                            colClasses = c("character", "character", "character",  "character", "character", "character"),
+                            nrows = 654572,
+                            stringsAsFactors = FALSE
+)
+assert_that(nrow(nutrient.definition) == 150)
+assert_that(ncol(nutrient.definition) == 6)
+
+nutrient.info <- inner_join(nutrient.data, nutrient.definition, by="NDB_No")  
+assert_that(nrow(nutrient.info) == 654572) #TODO for some reason, this is 0
+assert_that(ncol(nutrient.info) == 18 + 6 - 1)
+
 # Weight            WEIGHT          15,228
 weight <- read.table('data/WEIGHT.txt', 
                          header = FALSE, 
@@ -102,6 +119,6 @@ nutrition.info <- inner_join(nutrition.info, weight, by="NDB_No")
 assert_that(nrow(nutrition.info) == 15228)
 assert_that(ncol(nutrition.info) == 15 + 7 - 1)
 
-nutrition.info <- inner_join(nutrition.info, nutrient.data, by="NDB_No")  
-assert_that(nrow(nutrition.info) == 654572) #1234081 TODO
-assert_that(ncol(nutrition.info) == 21 + 18 - 1)
+nutrition.info <- inner_join(nutrition.info, nutrient.info, by="NDB_No")  
+assert_that(nrow(nutrition.info) == 654572) #1,234,081 TODO
+assert_that(ncol(nutrition.info) == 21 + 23 - 1)
